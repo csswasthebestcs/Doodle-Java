@@ -15,14 +15,15 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
     private int characterY = 600;
     private int characterSize = 30;
 
-    private int platformY = 650;
+    private int platformY = 700;
     private boolean jumping = false;
     private int jumpCount = 0;
-    private int fallSpeed = 10;
+    private int fallSpeed = 4;
     private int platformCount = 1;
     private ArrayList<Platform> platforms = new ArrayList<Platform>();
     private Random random = new Random();
     private Timer timer;
+
     public DoodleJumpGame() {
         setTitle("Doodle Jump");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +44,7 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
         super.paint(g);
 
         g.setColor(Color.RED);
-        g.fillOval(characterX, characterY, characterSize, characterSize);
+        g.fillRect(characterX, characterY, characterSize, characterSize);
 
         for (Platform platform : platforms) {
             g.setColor(Color.BLUE);
@@ -132,6 +133,7 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
 
         repaint();
     }
+
 
 
 
