@@ -12,7 +12,8 @@ import builds.Platform;
 
 public class DoodleJumpGame extends JFrame implements KeyListener, ActionListener {
     private int characterX = 100;
-    private int characterY = 500;
+    private int characterY = 600;
+    private int characterSize = 30;
 
     private int platformY = 650;
     private boolean jumping = false;
@@ -42,13 +43,14 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
         super.paint(g);
 
         g.setColor(Color.RED);
-        g.fillRect(characterX, characterY, 50, 50);
+        g.fillOval(characterX, characterY, characterSize, characterSize);
 
         for (Platform platform : platforms) {
             g.setColor(Color.BLUE);
             g.fillRect(platform.getX(), platform.getY(), platform.getWidth(), platform.getHeight());
         }
     }
+
 
     public boolean collision(int x1, int y1, int width1, int height1, int x2, int y2, int radius, int platformWidth) {
         int dx = x1 + width1 / 2 - x2 - platformWidth / 2;
@@ -91,17 +93,23 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
         for (Platform platform : platforms) {
             if (collision(characterX, characterY, 50, 50, platform.getX() + 50, platform.getY() + 5, 5, 50)) {
                 jumping = true;
-                fallSpeed = -40;
-                break;
+                fallSpeed = -10;
             }
         }
 
         if (platforms.size() < 5) {
+            int highestY = platformY;
+            for (Platform platform : platforms) {
+                if (platform.getY() < highestY) {
+                    highestY = platform.getY();
+                }
+            }
             while (true) {
                 int platformX = random.nextInt(getWidth() - 100);
+                int platformY = highestY - random.nextInt(100) - 50;
                 boolean validPlatform = true;
                 for (Platform platform : platforms) {
-                    if (collision(platformX, platformY, platform.getWidth(), platform.getHeight(), platform.getX(), platform.getY(), 5, 50)) {
+                    if (collision(platformX, platformY, 100, 10, platform.getX(), platform.getY(), 50, platform.getWidth())) {
                         validPlatform = false;
                         break;
                     }
@@ -127,13 +135,21 @@ public class DoodleJumpGame extends JFrame implements KeyListener, ActionListene
 
 
 
+
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_SPACE && !jumping) {
+        if (keyCode == KeyEvent.VK_LEFT) {
+            characterX -= 10;
+            repaint();
+        } else if (keyCode == KeyEvent.VK_RIGHT) {
+            characterX += 10;
+            repaint();
+        } else if (keyCode == KeyEvent.VK_SPACE && !jumping) {
             jumping = true;
         }
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
